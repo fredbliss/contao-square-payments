@@ -11,9 +11,16 @@
 
 namespace IntelligentSpark\Module;
 
+use Contao\Module as Contao_Module;
 use SquareConnect;
 
-class Square extends \Module {
+class Square extends Contao_Module {
+
+    /**
+     * Square Location
+     * @var object
+     */
+    protected $location;
 
     /**
      * Template
@@ -51,31 +58,35 @@ class Square extends \Module {
      */
     protected function compile()
     {
-        $this->Template->html = (TL_MODE == 'FE') ? $this->html : htmlspecialchars($this->html);
+        $this->getLocationIDs();
     }
 
     protected function getLocationIDs() {
         # setup authorization
-        \SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken($this->access_token);
+        SquareConnect\Configuration::getDefaultConfiguration()->setAccessToken($this->personal_access_token);
         # create an instance of the Location API
 
-        $locations_api = new \SquareConnect\Api\LocationsApi();
+        $locations_api = new SquareConnect\Api\LocationsApi();
 
         try {
             $locations = $locations_api->listLocations();
-            print_r($locations->getLocations());
-        } catch (\SquareConnect\ApiException $e) {
-            echo "Caught exception!<br/>";
+            $this->location = current(array_filter($locations->getLocations(), function($location) {
+                $capabilities = $location->getCapabilities();
+                return is_array($capabilities) &&
+                    in_array('CREDIT_CARD_PROCESSING', $capabilities);
+            }));
+        } catch (SquareConnect\ApiException $e) {
+            /*echo "Caught exception!<br/>";
             print_r("<strong>Response body:</strong><br/>");
             echo "<pre>"; var_dump($e->getResponseBody()); echo "</pre>";
             echo "<br/><strong>Response headers:</strong><br/>";
             echo "<pre>"; var_dump($e->getResponseHeaders()); echo "</pre>";
-            exit(1);
+            exit(1);*/
         }
     }
 
     protected function chargeCard() {
-        $transactions_api = new \SquareConnect\Api\TransactionsApi();
+        $transactions_api = new SquareConnect\Api\TransactionsApi();
 
         $request_body = array (
             "card_nonce" => $this->nonce,
@@ -93,9 +104,9 @@ class Square extends \Module {
         );
 
         try {
-            $result = $transactions_api->charge($this->location_id,  $request_body);
+            $result = $transactions_api->charge($this->location->getId(),  $request_body);
             print_r($result);
-        } catch (\SquareConnect\ApiException $e) {
+        } catch (SquareConnect\ApiException $e) {
             echo "Exception when calling TransactionApi->charge:";
             var_dump($e->getResponseBody());
         }
