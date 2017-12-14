@@ -1,0 +1,46 @@
+{
+  "name": "intelligentspark/contao-square-payments",
+  "description": "A Contao module for taking payments via Square",
+  "keywords": [
+    "contao",
+    "frontend",
+    "module",
+    "square",
+    "payments",
+    "ecommerce"
+  ],
+  "type": "contao-module",
+  "license": "LGPL-3.0+",
+  "require": {
+    "php": ">=5.3.2",
+    "contao/core": ">=3.3.0,<4.0.0-dev",
+    "contao-community-alliance/composer-plugin": "*",
+    "terminal42/contao-namespace-class-loader":"~1.0",
+    "square/connect": "*"
+  },
+  "authors": [
+    {
+      "name": "intelligentspark",
+      "email": "fred.bliss@intelligentspark.com"
+    }
+  ],
+  "autoload": {
+    "psr-0": {
+      "IntelligentSpark\\": [
+        "system/modules/contao-square-payments/library/"
+      ]
+    }
+  },
+  "extra": {
+    "contao": {
+      "sources": {
+        "": "system/modules/contao-square-payments"
+      }
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "preferred-install": "dist"
+  }
+}
