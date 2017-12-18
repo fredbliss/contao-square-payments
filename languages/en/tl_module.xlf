@@ -8,6 +8,12 @@
             <trans-unit id="tl_module.personal_access_token.1">
                 <source>Please enter the Square API Personal Access Token.</source>
             </trans-unit>
+            <trans-unit id="tl_module.application_id.0">
+                <source>Square API Application ID</source>
+            </trans-unit>
+            <trans-unit id="tl_module.application_id.1">
+                <source>Please enter the Square API Application ID.</source>
+            </trans-unit>
             <trans-unit id="tl_module.square_legend">
                 <source>Square Settings</source>
             </trans-unit>

@@ -1,5 +1,5 @@
 // Set the application ID
-var applicationId = "REPLACE_ME";
+var applicationId = "sandbox-sq0idp-R24jX4qoKx2g3KRDXgDl7Q";
 
 // Set the location ID
 var locationId = "REPLACE_ME";
@@ -28,7 +28,7 @@ var paymentForm = new SqPaymentForm({
     // Initialize the payment form elements
     applicationId: applicationId,
     locationId: locationId,
-    inputClass: 'sq-input',
+    inputClass: 'form-control',
 
     // Customize the CSS for SqPaymentForm iframe elements
     inputStyles: [{
@@ -105,19 +105,14 @@ var paymentForm = new SqPaymentForm({
 
                 total: {
                     label: "Merchant Name",
-                    amount: "1.01",
+                    amount: document.getElementById('sq-amount'),
                     pending: false,
                 },
 
                 lineItems: [
                     {
                         label: "Subtotal",
-                        amount: "1.00",
-                        pending: false,
-                    },
-                    {
-                        label: "Tax",
-                        amount: "0.01",
+                        amount: document.getElementById('sq-amount'),
                         pending: false,
                     }
                 ]

@@ -6,31 +6,66 @@
     <<?= $this->hl ?>><?= $this->headline ?></<?= $this->hl ?>>
   <?php endif; ?>
 
-  <form<?php if ($this->action): ?> action="<?= $this->action ?>"<?php endif; ?> id="<?= $this->formId ?>" method="post">
+  <form<?php if ($this->action): ?> action="<?= $this->action ?>"<?php endif; ?> id="nonce-form" method="post">
     <div class="formbody">
-      <input type="hidden" name="FORM_SUBMIT" value="<?= $this->formId ?>">
+      <input type="hidden" name="FORM_SUBMIT" value="nonce-form">
       <input type="hidden" name="REQUEST_TOKEN" value="{{request_token}}">
-      <?php if ($this->error): ?>
-        <p class="error"><?= $this->error ?></p>
+      <div class="error alert alert-danger text-center hidden" id="errors" role="alert"><?= $this->error ?></div>
+      <?php if ($this->message): ?>
+        <div class="message alert alert-success text-center" role="alert"><?= $this->message; ?></div>
       <?php endif; ?>
-      <?php if (!$this->tableless): ?>
-        <table>
-          <?= $this->fields ?>
-          <tr class="<?= $this->rowLast ?>">
-            <td class="col_0 col_first">&nbsp;</td>
-            <td class="col_1 col_last"><div class="submit_container"><input type="submit" class="submit" value="<?= $this->slabel ?>"></div></td>
-          </tr>
-        </table>
-      <?php else: ?>
         <div class="fields">
-          <?= $this->fields ?>
+            <table>
+                  <tbody>
+                    <tr>
+                       <td>Invoice Number/Customer Name/Ref ID</td>
+                       <td><input type="text" id="sq-invoice-num" class="form-control required" name="invoice-number"></td>
+                      </tr>
+                    <tr>
+                     <td>Amount</td>
+                     <td><input type="text" id="sq-amount" class="form-control required" name="amount" placeholder="0.00"></td>
+                    </tr>
+                    <tr>
+                      <td>Card Number:</td>
+                      <td><div id="sq-card-number"></div></td>
+                    </tr>
+                    <tr>
+                      <td>CVV:</td>
+                      <td><div id="sq-cvv"></div></td>
+                    </tr>
+                    <tr>
+                      <td>Expiration Date: </td>
+                      <td><div id="sq-expiration-date"></div></td>
+                    </tr>
+                    <tr>
+                      <td>Postal Code:</td>
+                      <td><div id="sq-postal-code"></div></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" class="text-center">
+                        <button id="sq-creditcard" class="btn btn-primary" onclick="requestCardNonce(event)">
+                          Pay with card
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                  </table>
         </div>
-        <div class="submit_container">
-          <input type="submit" class="submit" value="<?= $this->slabel ?>">
-        </div>
-      <?php endif; ?>
     </div>
+      <!--
+        After a nonce is generated it will be assigned to this hidden input field.
+      -->
+      <input type="hidden" id="card-nonce" name="card-nonce" value="">
   </form>
-
+    <div id="sq-walletbox">
+        Pay with a Digital Wallet
+        <!--<div id="sq-apple-pay-label" class="wallet-not-enabled">Apple Pay for Web not enabled</div>
+        !-- Placeholder for Apple Pay for Web button --
+        <button id="sq-apple-pay" class="button-apple-pay"></button>
+-->
+        <div id="sq-masterpass-label" class="wallet-not-enabled">Masterpass not enabled</div>
+        <!-- Placeholder for Masterpass button -->
+        <button id="sq-masterpass" class="button-masterpass"></button>
+      </div>
 </div>
 <!-- indexer::continue -->
