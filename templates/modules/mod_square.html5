@@ -18,7 +18,12 @@
             <table>
                   <tbody>
                     <tr>
-                       <td>Invoice Number/Customer Name/Ref ID</td>
+                       <td>Name As Appears on Credit Card</td>
+                       <td><input type="text" id="sq-cc-name" class="form-control required" name="cc-name"></td>
+                      </tr>
+                    <tr>
+                    <tr>
+                       <td>Invoice Number</td>
                        <td><input type="text" id="sq-invoice-num" class="form-control required" name="invoice-number"></td>
                       </tr>
                     <tr>
@@ -42,6 +47,9 @@
                       <td><div id="sq-postal-code"></div></td>
                     </tr>
                     <tr>
+                        <td colspan="2">&nbsp;</td>
+                    </tr>
+                    <tr>
                       <td colspan="2" class="text-center">
                         <button id="sq-creditcard" class="btn btn-primary" onclick="requestCardNonce(event)">
                           Pay with card
@@ -57,7 +65,7 @@
       -->
       <input type="hidden" id="card-nonce" name="card-nonce" value="">
   </form>
-    <div id="sq-walletbox">
+    <div id="sq-walletbox" class="hidden">
         Pay with a Digital Wallet
         <!--<div id="sq-apple-pay-label" class="wallet-not-enabled">Apple Pay for Web not enabled</div>
         !-- Placeholder for Apple Pay for Web button --
