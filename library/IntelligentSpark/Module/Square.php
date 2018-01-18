@@ -78,15 +78,51 @@ var paymentForm=new SqPaymentForm({applicationId:applicationId,locationId:locati
                 $amount = (float)\Input::post('amount');
                 $nonce = \Input::post('card-nonce');
                 $invoice_number = \Input::post('invoice-number');
+                $customer_email = \Input::post('email');
+                $customer_name = \Input::post('cc-name');
 
                 $result = $this->chargeCard($nonce,$amount,$invoice_number);
+                $transaction = $result->getTransaction();
 
                 if(array_key_exists('error',$result)) {
                     $this->Template->error = $result['error']['detail'];
                 }else{
-                    $this->Template->message = "Charge Successful! Thank you for your payment.";
+                    $this->Template->message = "Charge Successful! Thank you for your payment. A confirmation email has been sent to you and to us.";
+                    $arrData['amount'] = $amount;
+                    $arrData['email'] = $customer_email;
+                    $arrData['invoice_number'] = $invoice_number;
+                    $arrData['customer_name'] = $customer_name;
+                    $arrData['transaction_datetime'] = $transaction->getCreatedAt();
+                    $arrData['transaction_id'] = $transaction->getId();
+                    $this->sendEmail($GLOBALS['TL_ADMIN_EMAIL'],$customer_email,'confirmation',$arrData);
+                    $this->sendEmail($GLOBALS['TL_ADMIN_EMAIL'],$this->sq_confirmation_email,'payment-received',$arrData);
                 }
         }
+    }
+
+    protected function sendEmail($from,$to,$type,$arrData) {
+        $email = new \Email();
+        $email->from = $from;
+
+        switch($type) {
+            case 'confirmation':
+                //send confirmation to customer
+                $email->subject = 'Thank you for your payment!';
+                $email->text = 'Your payment of '.$arrData['amount'].' has been submitted for invoice #'.$arrData['invoice_number'].'. Thank you for your business!';
+                break;
+            case 'payment-received':
+                //send email to terry
+                $email->subject = '[Web Payment] - Invoice #'.$arrData['invoice_number'].' - A payment of '.$arrData['amount'].' has been submitted.';
+                $email->text = 'Payment Amount: ' . $arrData['amount'] . "\n";
+                $email->text .= 'Invoice #: ' . $arrData['invoice_number'] . "\n";
+                $email->text .= 'Customer Name: ' . $arrData['customer_name'] . "\n";
+                $email->text .= 'Transaction ID: ' . $arrData['transaction_id'] . "\n";
+                $email->text .= 'Date/Time: ' . $arrData['transaction_datetime'];
+                break;
+        }
+
+
+        $email->sendTo(array($to));
     }
 
     protected function getLocationIDs() {

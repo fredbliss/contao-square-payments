@@ -17,6 +17,12 @@
             <trans-unit id="tl_module.square_legend">
                 <source>Square Settings</source>
             </trans-unit>
+            <trans-unit id="tl_module.sq_confirmation_email.0">
+                <source>Confirmation Email</source>
+            </trans-unit>
+            <trans-unit id="tl_module.sq_confirmation_email.1">
+                <source>Please provide the email where payment notifications will be sent.</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>

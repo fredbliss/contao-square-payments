@@ -23,6 +23,11 @@
                       </tr>
                     <tr>
                     <tr>
+                       <td>Email </td>
+                       <td><input type="text" id="sq-email" class="form-control required" name="email"></td>
+                      </tr>
+                    <tr>
+                    <tr>
                        <td>Invoice Number</td>
                        <td><input type="text" id="sq-invoice-num" class="form-control required" name="invoice-number"></td>
                       </tr>
